@@ -25,7 +25,19 @@ def validate_orders_task() -> dict:
     5. Send the Discord alert.
     6. Raise an error on failed validation.
     """
-    raise NotImplementedError
+    # Import here to keep module import safe when Airflow isn't installed
+    from src.config import AIRFLOW_INPUT_FILE, SUMMARY_FILE
+    from src.validation import run_lab_check
+
+    # Use configured AIRFLOW_INPUT_FILE and write to SUMMARY_FILE
+    summary = run_lab_check(
+        input_path=AIRFLOW_INPUT_FILE,
+        output_path=SUMMARY_FILE,
+        allow_failure=False,
+        skip_discord=False,
+    )
+
+    return summary
 
 
 if DAG is not None:

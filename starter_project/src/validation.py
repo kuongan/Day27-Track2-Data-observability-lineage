@@ -71,10 +71,11 @@ def send_discord_message(summary: dict[str, int | str], webhook_url: str = DISCO
         f"Invalid statuses: {summary['invalid_statuses']}"
     )
     payload = json.dumps({"content": message}).encode("utf-8")
+    headers = {"Content-Type": "application/json", "User-Agent": "python-urllib/3"}
     http_request = request.Request(
         webhook_url,
         data=payload,
-        headers={"Content-Type": "application/json"},
+        headers=headers,
         method="POST",
     )
     with request.urlopen(http_request, timeout=15) as response:
